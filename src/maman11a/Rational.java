@@ -74,7 +74,16 @@ public class Rational {
     }
     
     public Rational reduce() {
+        int gcd = p > q ? gcd(p,q) : gcd(q, p);
+        return new Rational(p / gcd, q / gcd);
+    }
+    
+    private int gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
         
+        return gcd(b, a % b);
     }
     
     @Override
