@@ -11,23 +11,23 @@ package maman11a;
  */
 public class Rational {
     
-    private int p;
-    private int q;
+    private int numerator;
+    private int denomenator;
     
     Rational(int p, int q) {
         validateAndSet(p, q);
     }
     
     public int getNumerator() {
-        return p;
+        return numerator;
     }
     
     public int getDenominator() {
-        return q;
+        return denomenator;
     }
     
     public boolean greaterThan(Rational rational) {
-        return p * rational.getDenominator()> rational.getNumerator() * q;
+        return numerator * rational.getDenominator()> rational.getNumerator() * denomenator;
     }
     
     @Override
@@ -37,27 +37,35 @@ public class Rational {
         }
         
         Rational rational = (Rational) object;
-        return p * rational.getDenominator() == rational.getNumerator() * q;
+        return numerator * rational.getDenominator() == rational.getNumerator() * denomenator;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + this.numerator;
+        hash = 89 * hash + this.denomenator;
+        return hash;
     }
     
     public Rational plus(Rational rational) {
         if(rational == null) {
-            return new Rational(p, q);
+            return new Rational(numerator, denomenator);
         }
         
-        int summedP = p * rational.getDenominator() + rational.getNumerator() * q;
-        int summedQ = q * rational.getDenominator();
+        int summedP = numerator * rational.getDenominator() + rational.getNumerator() * denomenator;
+        int summedQ = denomenator * rational.getDenominator();
        
         return new Rational(summedP, summedQ);
     }
     
     public Rational minus(Rational rational) {
         if(rational == null) {
-            return new Rational(p, q);
+            return new Rational(numerator, denomenator);
         }
         
-        int summedP = p * rational.getDenominator() - rational.getNumerator() * q;
-        int summedQ = q * rational.getDenominator();
+        int summedP = numerator * rational.getDenominator() - rational.getNumerator() * denomenator;
+        int summedQ = denomenator * rational.getDenominator();
        
         return new Rational(summedP, summedQ);
     }
@@ -67,15 +75,16 @@ public class Rational {
             return new Rational(0, 0);
         }
         
-        int multipliedP = p * rational.getNumerator();
-        int multipliedQ = q * rational.getDenominator();
+        int multipliedP = numerator * rational.getNumerator();
+        int multipliedQ = denomenator * rational.getDenominator();
        
         return new Rational(multipliedP, multipliedQ);
     }
     
     public Rational reduce() {
-        int gcd = p > q ? gcd(p,q) : gcd(q, p);
-        return new Rational(p / gcd, q / gcd);
+        int absNum = Math.abs(numerator);
+        int gcd = absNum > denomenator ? gcd(absNum,denomenator) : gcd(denomenator, absNum);
+        return new Rational(numerator / gcd, denomenator / gcd);
     }
     
     private int gcd(int a, int b) {
@@ -88,17 +97,18 @@ public class Rational {
     
     @Override
     public String toString() {
-        return p + "/" + q;
+        Rational reduced = reduce();
+        return reduced.getNumerator() + "/" + reduced.getDenominator();
     }
     
     private void validateAndSet(int p, int q) {
         if(q > 0) {
-            this.p = p;
-            this.q = q;
+            this.numerator = p;
+            this.denomenator = q;
         }
         else {
-            this.p = 0;
-            this.q = 1;
+            this.numerator = 0;
+            this.denomenator = 1;
         }
     }
 }
